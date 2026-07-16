@@ -1,0 +1,185 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:format_name",
+ "creation": "2026-05-22 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "format_name",
+  "dynamic_form_template",
+  "is_default",
+  "column_break_details",
+  "is_active",
+  "page_section",
+  "page_width",
+  "page_height",
+  "margin_top",
+  "margin_right",
+  "margin_bottom",
+  "margin_left",
+  "layout_section",
+  "layout_json",
+  "snapshot_section",
+  "template_snapshot_json",
+  "preview_image"
+ ],
+ "fields": [
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Print Format Details"
+  },
+  {
+   "fieldname": "format_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Format Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "dynamic_form_template",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Dynamic Form Template",
+   "options": "Dynamic Form Template",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_default",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Default"
+  },
+  {
+   "fieldname": "column_break_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active",
+   "search_index": 1
+  },
+  {
+   "fieldname": "page_section",
+   "fieldtype": "Section Break",
+   "label": "Page Settings"
+  },
+  {
+   "default": "210mm",
+   "fieldname": "page_width",
+   "fieldtype": "Data",
+   "label": "Page Width"
+  },
+  {
+   "default": "297mm",
+   "fieldname": "page_height",
+   "fieldtype": "Data",
+   "label": "Page Height"
+  },
+  {
+   "default": "10mm",
+   "fieldname": "margin_top",
+   "fieldtype": "Data",
+   "label": "Margin Top"
+  },
+  {
+   "default": "10mm",
+   "fieldname": "margin_right",
+   "fieldtype": "Data",
+   "label": "Margin Right"
+  },
+  {
+   "default": "10mm",
+   "fieldname": "margin_bottom",
+   "fieldtype": "Data",
+   "label": "Margin Bottom"
+  },
+  {
+   "default": "10mm",
+   "fieldname": "margin_left",
+   "fieldtype": "Data",
+   "label": "Margin Left"
+  },
+  {
+   "fieldname": "layout_section",
+   "fieldtype": "Section Break",
+   "label": "Layout JSON"
+  },
+  {
+   "fieldname": "layout_json",
+   "fieldtype": "JSON",
+   "label": "Layout JSON",
+   "reqd": 1
+  },
+  {
+   "fieldname": "snapshot_section",
+   "fieldtype": "Section Break",
+   "label": "Template Snapshot"
+  },
+  {
+   "fieldname": "template_snapshot_json",
+   "fieldtype": "JSON",
+   "label": "Template Snapshot JSON"
+  },
+  {
+   "fieldname": "preview_image",
+   "fieldtype": "Attach Image",
+   "label": "Preview Image"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-22 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Print Builder",
+ "name": "Dynamic Print Format",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "share": 1,
+   "write": 1,
+   "role": "Form Builder Admin"
+  },
+  {
+   "read": 1,
+   "role": "Form Builder User"
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "share": 1,
+   "write": 1,
+   "role": "System Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

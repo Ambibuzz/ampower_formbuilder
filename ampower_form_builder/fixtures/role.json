@@ -1,0 +1,28 @@
+[
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Role",
+  "home_page": null,
+  "is_custom": 1,
+  "modified": "2026-05-15 00:00:00.000000",
+  "name": "Form Builder Admin",
+  "restrict_to_domain": null,
+  "role_name": "Form Builder Admin",
+  "two_factor_auth": 0
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Role",
+  "home_page": null,
+  "is_custom": 1,
+  "modified": "2026-05-15 00:00:00.000000",
+  "name": "Form Builder User",
+  "restrict_to_domain": null,
+  "role_name": "Form Builder User",
+  "two_factor_auth": 0
+ }
+]

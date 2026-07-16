@@ -1,0 +1,82 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"fBqW2zvJm1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Quick Access</span>\",\"col\":12}},{\"id\":\"Hk8Qm2pR1x\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Form Builder\",\"col\":3}},{\"id\":\"Zx4N8tL3sY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Form Viewer\",\"col\":3}},{\"id\":\"RRPGZf42qb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Form Builder Documentation\",\"col\":3}}]",
+ "creation": "2026-05-15 00:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "milestone",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Form Builder",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Form Builder",
+   "link_count": 0,
+   "link_to": "form_builder",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Form Viewer",
+   "link_count": 0,
+   "link_to": "form_viewer",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-05-15 11:25:05.749574",
+ "modified_by": "Administrator",
+ "module": "Ampower Form Builder",
+ "name": "Form Builder",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Form Builder Admin"
+  },
+  {
+   "role": "Form Builder User"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Form Builder Documentation",
+   "link_to": "form-builder-docs",
+   "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Form Builder",
+   "link_to": "form_builder",
+   "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Form Viewer",
+   "link_to": "form_viewer",
+   "type": "Page"
+  }
+ ],
+ "title": "Form Builder"
+}

@@ -1,0 +1,9 @@
+env/
+*.pyc
+__pycache__/
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+ampower_form_builder/public/dist

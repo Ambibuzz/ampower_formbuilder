@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "creation": "2026-03-13 13:16:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "openai_api_key",
+  "google_service_account_json",
+  "openai_api_url",
+  "form_builder_system_prompt",
+  "autofill_system_prompt"
+ ],
+ "fields": [
+  {
+   "fieldname": "openai_api_key",
+   "fieldtype": "Password",
+   "label": "OpenAI API Key"
+  },
+  {
+   "description": "Paste the Google Cloud service account JSON used to call Vision OCR.",
+   "fieldname": "google_service_account_json",
+   "fieldtype": "Long Text",
+   "label": "Google Service Account JSON"
+  },
+  {
+   "default": "https://api.openai.com/v1/chat/completions",
+   "description": "OpenAI Chat Completions endpoint used by the AI import flow.",
+   "fieldname": "openai_api_url",
+   "fieldtype": "Data",
+   "label": "OpenAI API URL"
+  },
+  {
+   "description": "Optional custom system prompt for the AI Form Builder flow. Leave blank to use the built-in fallback prompt.",
+   "fieldname": "form_builder_system_prompt",
+   "fieldtype": "Long Text",
+   "label": "Form Builder System Prompt"
+  },
+  {
+   "description": "Optional custom system prompt for the AI Autofill flow. Leave blank to use the built-in fallback prompt.",
+   "fieldname": "autofill_system_prompt",
+   "fieldtype": "Long Text",
+   "label": "Autofill System Prompt"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-06 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ampower Form Builder",
+ "name": "Form Builder Config",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Form Builder Admin",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "select": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "role": "Form Builder User",
+   "select": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "select": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

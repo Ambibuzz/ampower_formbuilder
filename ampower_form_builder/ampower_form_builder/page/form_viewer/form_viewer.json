@@ -1,0 +1,29 @@
+{
+ "content": null,
+ "creation": "2026-03-13 11:00:00",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-05-15 11:21:53.929836",
+ "modified_by": "Administrator",
+ "module": "Ampower Form Builder",
+ "name": "form_viewer",
+ "owner": "Administrator",
+ "page_name": "form_viewer",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Form Builder Admin"
+  },
+  {
+   "role": "Form Builder User"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Form Viewer"
+}
