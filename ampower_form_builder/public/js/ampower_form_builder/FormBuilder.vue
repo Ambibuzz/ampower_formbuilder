@@ -3,7 +3,16 @@
 		<header class="afb-header">
 			<div class="afb-header-main">
 				<div class="afb-header-title">
-					<p class="afb-kicker">Ampower Form Builder</p>
+										<p class="afb-kicker">Ampower Form Builder</p>
+					<nav class="afb-breadcrumb" aria-label="Breadcrumb">
+						<span class="afb-breadcrumb-item">Home</span>
+						<span class="afb-breadcrumb-separator">/</span>
+						<span class="afb-breadcrumb-item">Ampower Form Builder</span>
+						<template v-if="store.currentTemplate.name || store.currentTemplate.form_name">
+							<span class="afb-breadcrumb-separator">/</span>
+							<span class="afb-breadcrumb-item is-current">{{ store.currentTemplate.form_name || store.currentTemplate.name }}</span>
+						</template>
+					</nav>
 					<div v-if="showVersionMeta" class="afb-version-row">
 						<span class="afb-version-pill">{{ `${t("Version")} ${store.currentTemplate.version_label || "1.0"}` }}</span>
 						<span v-if="store.currentTemplate.base_form_name" class="afb-version-copy">
@@ -262,7 +271,17 @@ function handleAiDraftApplied(payload) {
 	});
 }
 
+async function flushActiveFieldInput() {
+	if (typeof document === "undefined") return;
+	const activeElement = document.activeElement;
+	if (activeElement && typeof activeElement.blur === "function") {
+		activeElement.blur();
+	}
+	await Promise.resolve();
+}
+
 async function saveTemplate() {
+	await flushActiveFieldInput();
 	await store.saveTemplate();
 }
 
@@ -343,7 +362,7 @@ async function createDoctype() {
 
 	try {
 		if (store.dirty || !store.currentTemplate.name) {
-			await store.saveTemplate();
+			await saveTemplate();
 		}
 	} catch {
 		return;

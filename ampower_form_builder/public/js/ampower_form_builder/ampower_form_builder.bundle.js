@@ -1,7 +1,7 @@
 import { createApp, reactive } from "vue";
 import { createPinia } from "pinia";
 import FormBuilderComponent from "./FormBuilder.vue";
-import FormViewerComponent from "./FormViewer.vue";
+import FormViewerComponent from "./features/form-viewer/FormViewerPage.vue";
 import PrintBuilderComponent from "./print_builder/PrintBuilder.vue";
 import { registerGlobalComponents } from "./globals.js";
 
