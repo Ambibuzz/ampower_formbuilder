@@ -1,0 +1,295 @@
+{% macro render_image_block(row, table) %}
+{% for col in table.headers %}
+{% if row.get(col.key) %}
+{% if col.is_image %}
+<div style="margin: 10px 0; text-align: center;">
+  <img src="{{ row.get(col.key) }}" style="max-height: 300px; max-width: 100%;">
+</div>
+{% else %}
+<div style="margin-bottom: 6px;">
+  <strong>{{ col.label }}:</strong> {{ row.get(col.key) }}
+</div>
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro render_table(table) %}
+{% if table.type == "image_table" %}
+{% if table.image_column == "2" %}
+<div style="width: 100%; overflow: hidden;">
+  {% for row in table.data %}
+  <div style="float:left; width:48%; margin-right:2%; margin-bottom:5px;">
+    {{ render_image_block(row, table) }}
+  </div>
+  {% if loop.index % 2 == 0 %}
+  <div style="clear:both;"></div>
+  {% endif %}
+  {% endfor %}
+  <div style="clear:both;"></div>
+</div>
+{% else %}
+{% for row in table.data %}
+<div style="margin-bottom:5px;">
+  {{ render_image_block(row, table) }}
+</div>
+{% endfor %}
+{% endif %}
+{% else %}
+<table class="bordered" style="width:100%; table-layout:fixed;">
+  <thead>
+    <tr>
+      {% for col in table.headers %}
+      <th>{{ col.label }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in table.data %}
+    <tr>
+      {% for col in table.headers %}
+      <td>{{ row.get(col.key, "") }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endmacro %}
+
+{% macro render_field_row(left_item=None, right_item=None) %}
+<tr>
+  <th><strong>{{ left_item.label if left_item else "" }}</strong></th>
+  <td>{{ left_item.value if left_item else "" }}</td>
+  <th><strong>{{ right_item.label if right_item else "" }}</strong></th>
+  <td>{{ right_item.value if right_item else "" }}</td>
+</tr>
+{% endmacro %}
+
+{% macro render_section(section) %}
+{% set columns = section.get("columns", []) %}
+<table >
+
+</table>
+{% if section.get("label") %}
+<h4 style="margin:5px 0 8px 0;">{{ section.get("label") }}</h4>
+{% endif %}
+
+{% if columns|length == 2 %}
+{% set left_items = columns[0].get("items", []) %}
+{% set right_items = columns[1].get("items", []) %}
+{% set max_len = [left_items|length, right_items|length]|max %}
+
+<table class="bordered" style="width:100%; table-layout:fixed; margin-bottom:5px;">
+    {% for i in range(max_len) %}
+    {{ render_field_row(
+      left_items[i] if i < left_items|length and left_items[i].type=="field" else none, 
+      right_items[i] if i < right_items|length and right_items[i].type=="field" else none ) }} 
+      
+      {% endfor %} 
+</table>
+
+{% for item in left_items %}
+{% if item.type != "field" %}
+<h6>{{ item.label }}</h6>
+{{ render_table(item) }}
+{% endif %}
+{% endfor %}
+
+{% for item in right_items %}
+{% if item.type != "field" %}
+<h6>{{ item.label }}</h6>
+{{ render_table(item) }}
+{% endif %}
+{% endfor %}
+{% else %}
+{% set items = columns[0].get("items", []) if columns else [] %}
+
+<table class="bordered" style="width:100%; table-layout:fixed; margin-bottom:5px;">
+  <tbody>
+    {% for item in items %}
+    {% if item.type == "field" %}
+    <tr>
+      <td><strong>{{ item.label }}</strong></td>
+      <td>{{ item.value }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+{% for item in items %}
+{% if item.type != "field" %}
+<h6 style="font-weight:bold; text-transform:uppercase;">{{ item.label }}</h6>
+{{ render_table(item) }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro render_form_layout(form_layout) %}
+{% for section in form_layout.get("sections", []) %}
+{{ render_section(section) }}
+{% endfor %}
+{% endmacro %}
+
+{% macro render_photo_table(photo_table) %}
+{% if photo_table and photo_table|length %}
+
+<table style="
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+" class="bordered">
+  <tbody>
+
+    {% set ns = namespace(open_half_row=false, half_count=0) %}
+
+    {% for row in photo_table %}
+
+    {% set width_type = row.print_width or 'Full Width' %}
+
+    <!-- ================= FULL WIDTH ================= -->
+    {% if width_type == 'Full Width' %}
+
+    {% if ns.open_half_row %}
+    <td style="width: 50%; padding: 10px;"></td>
+    </tr>
+    {% set ns.open_half_row = false %}
+    {% set ns.half_count = 0 %}
+    {% endif %}
+
+    <tr style="page-break-inside: avoid;">
+
+      <td colspan="2" style="
+                    width: 100%;
+                    padding: 10px;
+                    text-align: center;
+                    vertical-align: top;
+                ">
+
+        {% if row.title %}
+        <div style="
+                        margin-bottom: 8px;
+                        font-weight: bold;
+                        font-size: 13px;
+                        line-height: 1.5;
+                        text-align: center;
+                    ">
+          {{ row.title }}
+        </div>
+        {% endif %}
+
+        {% if row.image %}
+        <div style="
+                        width: 100%;
+                        min-height: 220px;
+                        text-align: center;
+                        vertical-align: middle;
+                    ">
+          <img src="{{ row.image }}" style="
+                                display: inline-block;
+                                max-width: 100%;
+                                max-height: 220px;
+                                object-fit: contain;
+                                vertical-align: middle;
+                             ">
+        </div>
+        {% endif %}
+
+        {% if row.remarks %}
+        <div style="
+                        margin-top: 8px;
+                        font-size: 12px;
+                        line-height: 1.5;
+                        text-align: center;
+                    ">
+          {{ row.remarks }}
+        </div>
+        {% endif %}
+
+      </td>
+
+    </tr>
+
+    <!-- ================= HALF WIDTH ================= -->
+    {% else %}
+
+    {% if not ns.open_half_row %}
+    <tr style="page-break-inside: avoid;">
+      {% set ns.open_half_row = true %}
+      {% set ns.half_count = 0 %}
+      {% endif %}
+
+      <td style="
+            width: 50%;
+            padding: 10px;
+            text-align: center;
+            vertical-align: top;
+        ">
+
+        {% if row.title %}
+        <div style="
+                    margin-bottom: 8px;
+                    font-weight: bold;
+                    font-size: 13px;
+                    line-height: 1.5;
+                    text-align: center;
+                ">
+          {{ row.title }}
+        </div>
+        {% endif %}
+
+        {% if row.image %}
+        <div style="
+                    width: 100%;
+                    min-height: 220px;
+                    text-align: center;
+                    vertical-align: middle;
+                ">
+          <img src="{{ row.image }}" style="
+                            display: inline-block;
+                            max-width: 100%;
+                            max-height: 220px;
+                            object-fit: contain;
+                            vertical-align: middle;
+                         ">
+        </div>
+        {% endif %}
+
+        {% if row.remarks %}
+        <div style="
+                    margin-top: 8px;
+                    font-size: 12px;
+                    line-height: 1.5;
+                    text-align: cenetr;
+                ">
+          {{ row.remarks }}
+        </div>
+        {% endif %}
+
+      </td>
+
+      {% set ns.half_count = ns.half_count + 1 %}
+
+      {% if ns.half_count == 2 %}
+    </tr>
+    {% set ns.open_half_row = false %}
+    {% set ns.half_count = 0 %}
+    {% endif %}
+
+    {% endif %}
+
+    {% endfor %}
+
+    {% if ns.open_half_row %}
+    <td style="width: 50%; padding: 10px;"></td>
+    </tr>
+    {% endif %}
+
+  </tbody>
+
+</table>
+
+{% endif %}
+{% endmacro %}

@@ -257,7 +257,7 @@ Save the template after confirming the `Form Type` and `Target DocType`.
 
 On save, AmPower Form Builder syncs the target DocType with:
 
-- a reusable `Ampower Form Integration` tab
+- a reusable `AmPower Form Integration` tab
 - a `Select Form` link filtered to active integration templates for that DocType
 - an embedded form viewer area
 - a `Submission Reference` link to the saved submission
@@ -268,7 +268,7 @@ The integration tab is hidden on a brand-new unsaved parent record, so open and 
 
 Go to the target DocType in Desk and open a document.
 
-You should see the `Ampower Form Integration` tab with the form selector.
+You should see the `AmPower Form Integration` tab with the form selector.
 
 Select the saved form template if it is not selected already.
 

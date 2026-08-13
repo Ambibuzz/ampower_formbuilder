@@ -318,7 +318,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 						"Open a saved parent document to see the integration tab.",
 					]))}
 					${card("What appears on the target DocType", list([
-						"A reusable <strong>Ampower Form Integration</strong> tab.",
+						"A reusable <strong>AmPower Form Integration</strong> tab.",
 						"A <strong>Select Form</strong> link filtered to active integration templates for that DocType.",
 						"An embedded form view area.",
 						"A read-only <strong>Submission Reference</strong> link to the saved submission.",

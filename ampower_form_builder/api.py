@@ -1,4 +1,4 @@
-# Copyright (c) 2026, Ambibuzz Technologies LLP and contributors
+﻿# Copyright (c) 2026, Ambibuzz Technologies LLP and contributors
 # For license information, please see license.txt
 
 """Whitelisted API methods for the Ampower Form Builder.
@@ -455,7 +455,7 @@ def _build_template_doc(
     return doc
 
 
-# ── Template APIs ──────────────────────────────────────────────────
+# Template APIs 
 
 
 @frappe.whitelist()
@@ -514,6 +514,7 @@ def get_active_templates(include_doctype_integration=0):
                 "version_group",
                 "source_template",
                 "is_latest_version",
+                "modified",
             ],
             order_by="base_form_name asc, version_sort_key desc, modified desc",
         )
@@ -761,8 +762,7 @@ def create_doctype_from_template(template_name, doctype_name=None, module=None):
         _handle_api_exception(_("Creating DocType"), error)
 
 
-# ── Submission APIs ────────────────────────────────────────────────
-
+# Submission APIs
 
 def _apply_reference_link(doc, reference_doctype=None, reference_name=None):
     reference_doctype = (reference_doctype or "").strip()
@@ -804,7 +804,7 @@ def _get_latest_submission_by_reference(form_template, reference_doctype, refere
 
 
 @frappe.whitelist()
-def save_submission(form_template, data, status="Submitted", reference_doctype=None, reference_name=None):
+def save_submission(form_template, data, status="Submitted", reference_doctype=None, reference_name=None, submission_name=None):
     """Create or update a Dynamic Form Submission record.
 
     Args:
@@ -819,7 +819,12 @@ def save_submission(form_template, data, status="Submitted", reference_doctype=N
     """
     try:
         payload = _normalize_json_payload(data)
-        doc = _get_latest_submission_by_reference(form_template, reference_doctype, reference_name, permission="write")
+        submission_name = (submission_name or "").strip()
+        doc = None
+
+        if submission_name and frappe.db.exists(SUBMISSION_DOCTYPE, submission_name):
+            doc = _get_submission_doc(submission_name, permission="write")
+
         if doc:
             doc.data_json = json.dumps(payload)
             doc.status = status
@@ -834,6 +839,7 @@ def save_submission(form_template, data, status="Submitted", reference_doctype=N
             })
             _apply_reference_link(doc, reference_doctype, reference_name)
             doc.insert()
+
         frappe.db.commit()
         return {
             "name": doc.name,
@@ -914,8 +920,8 @@ def get_submissions(form_template, page=1, page_size=20, reference_doctype=None,
         submissions = frappe.get_all(
             SUBMISSION_DOCTYPE,
             filters=filters,
-            fields=["name", "data_json", "status", "submitted_on", "owner"],
-            order_by="submitted_on desc",
+            fields=["name", "data_json", "status", "submitted_on", "modified", "owner"],
+            order_by="modified desc, submitted_on desc",
             start=(page - 1) * page_size,
             page_length=page_size,
         )
