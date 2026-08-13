@@ -7,10 +7,10 @@
 			:title="title || label"
 			@click.stop="toggle"
 		>
-			<span v-if="iconOnly" class="afb-dropdown-icon">•••</span>
+			<span v-if="iconOnly" class="afb-dropdown-icon" aria-hidden="true">&#8942;</span>
 			<template v-else>
 				<span>{{ label }}</span>
-				<span class="afb-dropdown-caret">▾</span>
+				<span class="afb-dropdown-caret" aria-hidden="true">&#9662;</span>
 			</template>
 		</button>
 	</div>
@@ -111,3 +111,53 @@ onBeforeUnmount(() => {
 	popper = null;
 });
 </script>
+
+<style scoped>
+.afb-dropdown {
+	display: inline-flex;
+}
+
+.afb-dropdown-menu-wrap {
+	z-index: 1050;
+}
+
+.afb-dropdown-menu {
+	min-width: 220px;
+	padding: 4px;
+	border: 1px solid #d1d8dd;
+	border-radius: 4px;
+	background: #ffffff;
+	box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.afb-dropdown-group + .afb-dropdown-group {
+	margin-top: 4px;
+	padding-top: 4px;
+	border-top: 1px solid #e5e7eb;
+}
+
+.afb-dropdown-group-label {
+	padding: 6px 10px;
+	font-size: 0.76rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #6b7280;
+}
+
+.afb-dropdown-item {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	padding: 7px 10px;
+	border: 0;
+	border-radius: 4px;
+	background: transparent;
+	text-align: left;
+	color: #1f2937;
+}
+
+.afb-dropdown-item:hover {
+	background: #f8f9fa;
+}
+</style>

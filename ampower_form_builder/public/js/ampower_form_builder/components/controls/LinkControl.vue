@@ -15,13 +15,16 @@ const slots = useSlots();
 const link = ref(null);
 const update_control = ref(true);
 const control = ref(null);
+let inputListener = null;
 let inputElement = null;
 let focusListener = null;
 let autocompleteOpenListener = null;
 let autocompleteCloseListener = null;
+let keydownListener = null;
 let dropdownLayer = null;
 let dropdownHost = null;
 let repositionHandler = null;
+let deletionIntent = false;
 
 const content = computed({
 	get: () => props.modelValue,
@@ -36,8 +39,14 @@ function getControlDf() {
 		change: () => {
 			if (!control.value) return;
 			if (update_control.value) {
-				content.value = control.value.get_value();
+				const nextValue = control.value.get_value?.();
+				const currentValue = String(content.value || "");
+				const nextInputValue = String(inputElement?.value || "");
+				if (nextValue || nextInputValue.trim() || deletionIntent || !currentValue.trim()) {
+					content.value = nextValue || nextInputValue || "";
+				}
 			}
+			deletionIntent = false;
 			update_control.value = true;
 		},
 	};
@@ -169,17 +178,25 @@ function detachInputListeners() {
 	if (inputElement && focusListener) {
 		inputElement.removeEventListener("focus", focusListener);
 	}
+	if (inputElement && inputListener) {
+		inputElement.removeEventListener("input", inputListener);
+	}
 	if (inputElement && autocompleteOpenListener) {
 		inputElement.removeEventListener("awesomplete-open", autocompleteOpenListener);
 	}
 	if (inputElement && autocompleteCloseListener) {
 		inputElement.removeEventListener("awesomplete-close", autocompleteCloseListener);
 	}
+	if (inputElement && keydownListener) {
+		inputElement.removeEventListener("keydown", keydownListener);
+	}
 	detachDropdown();
 	inputElement = null;
+	inputListener = null;
 	focusListener = null;
 	autocompleteOpenListener = null;
 	autocompleteCloseListener = null;
+	keydownListener = null;
 }
 
 function attachInputListeners() {
@@ -193,8 +210,25 @@ function attachInputListeners() {
 		attachDropdownToBody();
 	});
 	autocompleteCloseListener = () => nextTick(() => detachDropdown());
+	keydownListener = (event) => {
+		deletionIntent = event.key === "Backspace" || event.key === "Delete";
+	};
+	inputListener = () => {
+		const nextValue = inputElement?.value ?? "";
+		if (!nextValue && String(content.value || "").trim() && !deletionIntent) {
+			return;
+		}
+
+		// Treat direct typing as the source of truth so the Frappe control
+		// does not re-write partial link text while the user is still editing.
+		update_control.value = false;
+		content.value = nextValue;
+		deletionIntent = false;
+	};
 
 	inputElement.addEventListener("focus", focusListener);
+	inputElement.addEventListener("keydown", keydownListener);
+	inputElement.addEventListener("input", inputListener);
 	inputElement.addEventListener("awesomplete-open", autocompleteOpenListener);
 	inputElement.addEventListener("awesomplete-close", autocompleteCloseListener);
 }
@@ -234,6 +268,14 @@ onBeforeUnmount(() => {
 watch(
 	() => content.value,
 	(value) => {
+		// Skip syncing back values that originated from the live input event.
+		// Re-applying them through set_value() can clear partial DocType text
+		// in Frappe's Link control while the user is typing.
+		if (!update_control.value) {
+			update_control.value = true;
+			return;
+		}
+
 		update_control.value = false;
 		control.value?.set_value?.(value);
 	}

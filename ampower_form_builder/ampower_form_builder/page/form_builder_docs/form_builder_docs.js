@@ -62,7 +62,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 			summary: "A quick map of the builder, viewer, DocType creation and integration, and AI features before you start configuring anything.",
 			content: `
 				<p class="afb-docs-lead">
-					AmPower Form Builder stores form definitions as JSON, renders them dynamically, and keeps the data model intentionally small.
+					Ampower Form Builder stores form definitions as JSON, renders them dynamically, and keeps the data model intentionally small.
 					Use this guide if you want to install the app, import an existing DocType, create a real DocType from a saved form, embed a form into another DocType, or let AI draft and autofill forms for you.
 				</p>
 				<div class="afb-docs-grid two-up">
@@ -109,7 +109,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 				</p>
 				<div class="afb-docs-grid two-up">
 					${card("Form Builder Admin", list([
-						"Full access to all AmPower Form Builder doctypes.",
+						"Full access to all Ampower Form Builder doctypes.",
 						"Can create, read, write, delete, submit, cancel, amend, export, import, print, report, select, and share.",
 						"Use for setup, maintenance, and AI configuration.",
 					]))}
@@ -1141,7 +1141,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 			<div class="afb-docs-container">
 				<section class="afb-docs-hero">
 					<div class="afb-docs-hero-copy">
-						<div class="afb-docs-kicker">AmPower Form Builder</div>
+						<div class="afb-docs-kicker">Ampower Form Builder</div>
 						<h1>Setup, Import, Integrate & Automate Forms</h1>
 					</div>
 				</section>

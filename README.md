@@ -1,6 +1,6 @@
-# AmPower Form Builder
+# Ampower Form Builder
 
-AmPower Form Builder is a schema-driven form builder for Frappe/ERPNext. It lets you design forms visually, store the form definition as JSON, render those forms dynamically, capture submissions, optionally integrate a form directly into an existing DocType, and create a real DocType from a saved builder form when you need one.
+Ampower Form Builder is a schema-driven form builder for Frappe/ERPNext. It lets you design forms visually, store the form definition as JSON, render those forms dynamically, capture submissions, optionally integrate a form directly into an existing DocType, and create a real DocType from a saved builder form when you need one.
 
 ## What It Includes
 
@@ -30,7 +30,7 @@ This means you can support many forms without polluting the system with one DocT
 
 ## Print Builder
 
-AmPower Form Builder also ships a dedicated print-format editor in the same app.
+Ampower Form Builder also ships a dedicated print-format editor in the same app.
 
 It is built for `Dynamic Print Format` records and is separate from the form builder and form viewer screens.
 
@@ -84,7 +84,7 @@ bench --site <your-site> migrate
 Make sure:
 
 - `ampower_form_builder` is installed on your site
-- you have access to the AmPower Form Builder page
+- you have access to the Ampower Form Builder page
 - frontend assets are built and loading correctly
 - `Form Builder Config` has your `OpenAI API Key`, `OpenAI API URL`, and `Google Service Account JSON` set up
 - optional prompts are configured if you want to customize the AI flows:
@@ -255,7 +255,7 @@ The integration area on the target DocType will show:
 
 Save the template after confirming the `Form Type` and `Target DocType`.
 
-On save, AmPower Form Builder syncs the target DocType with:
+On save, Ampower Form Builder syncs the target DocType with:
 
 - a reusable `Ampower Form Integration` tab
 - a `Select Form` link filtered to active integration templates for that DocType
