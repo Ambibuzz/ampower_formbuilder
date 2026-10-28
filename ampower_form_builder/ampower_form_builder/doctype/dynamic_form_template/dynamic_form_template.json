@@ -80,6 +80,7 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Base Form Name",
+   "no_copy": 1,
    "read_only": 1,
    "search_index": 1
   },
@@ -89,6 +90,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Form Version",
+   "no_copy": 1,
    "read_only": 1,
    "reqd": 1,
    "search_index": 1
@@ -97,6 +99,7 @@
    "fieldname": "source_template",
    "fieldtype": "Link",
    "label": "Source Template",
+   "no_copy": 1,
    "options": "Dynamic Form Template",
    "read_only": 1
   },
@@ -106,6 +109,7 @@
    "fieldtype": "Int",
    "hidden": 1,
    "label": "Template Revision",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -113,6 +117,7 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Version Group",
+   "no_copy": 1,
    "read_only": 1,
    "search_index": 1
   },
@@ -145,7 +150,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-15 10:24:28.126064",
+ "modified": "2026-10-26 17:31:30.326319",
  "modified_by": "Administrator",
  "module": "Ampower Form Builder",
  "name": "Dynamic Form Template",
@@ -153,27 +158,20 @@
  "owner": "Administrator",
  "permissions": [
   {
-   "amend": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
-   "export": 1,
-   "import": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
+   "role": "Form Builder Admin",
    "select": 1,
-   "submit": 1,
-   "cancel": 1,
    "share": 1,
-   "write": 1,
-   "role": "Form Builder Admin"
+   "write": 1
   },
   {
-   "import": 1,
    "read": 1,
-   "select": 1,
-   "role": "Form Builder User"
+   "role": "Form Builder User",
+   "select": 1
   },
   {
    "create": 1,

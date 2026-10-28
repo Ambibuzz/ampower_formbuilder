@@ -1686,7 +1686,9 @@ function getPayload({ validateRequired = true } = {}) {
 		if (fieldVisibility.value[field.fieldname] === false) return;
 
 		const value = values[field.fieldname];
-		payload[field.fieldname] = value;
+		payload[field.fieldname] = ["Table", "Mixed Table"].includes(field.fieldtype)
+			? normalizeTableValue(field, Array.isArray(value) ? value : [])
+			: value;
 
 		const isEmpty = value === null || value === undefined || value === "" || (Array.isArray(value) && value.length === 0);
 		if (validateRequired && field.reqd && isEmpty) {
@@ -1954,11 +1956,6 @@ watch(
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	padding: 18px 18px 24px;
-	background: var(--fv-surface);
-	border: 1px solid var(--fv-border);
-	border-radius: var(--fv-radius);
-	box-shadow: var(--fv-shadow-sm);
 }
 
 .fv-view-body {

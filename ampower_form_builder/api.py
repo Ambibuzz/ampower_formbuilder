@@ -59,6 +59,7 @@ SCHEMA_FIELD_KEYS = {
     "reqd",
     "read_only",
     "hidden",
+    "vertical_table",
     "depends_on",
     "options",
     "fetch_from",
@@ -162,11 +163,15 @@ def _sanitize_fieldname(value, fallback="field"):
     return name.rstrip("_") or "field"
 
 
-def _sanitize_table_options(options):
+def _sanitize_table_options(options, source=None):
     parsed = _parse_schema_json(options)
+    source = dict(source or {})
     columns = []
     rows = []
-    for column in parsed.get("columns", []) if isinstance(parsed, dict) else []:
+    source_columns = source.get("table_columns") or source.get("columns") or parsed.get("columns") or []
+    source_rows = source.get("table_rows") or source.get("rows") or parsed.get("rows") or []
+
+    for column in source_columns if isinstance(source_columns, list) else []:
         column = dict(column or {})
         fieldname = _sanitize_fieldname(
             column.get("fieldname") or column.get("field_name") or column.get("label") or _("Column"),
@@ -185,7 +190,7 @@ def _sanitize_table_options(options):
                 "options": column.get("options") or "",
             }
         )
-    for row in parsed.get("rows", []) if isinstance(parsed, dict) else []:
+    for row in source_rows if isinstance(source_rows, list) else []:
         row = dict(row or {})
         rows.append(
             {
@@ -195,6 +200,7 @@ def _sanitize_table_options(options):
         )
     return {
         "mode": parsed.get("mode") or "table",
+        "vertical_table": 1 if source.get("vertical_table") in (True, "1", 1) or parsed.get("vertical_table") in (True, "1", 1) else 0,
         "table_row_title": parsed.get("table_row_title") or parsed.get("row_title") or "",
         "image_column": parsed.get("image_column") or "",
         "columns": columns,
@@ -215,7 +221,7 @@ def _sanitize_schema_field(field):
     if fieldtype in {"Link", "Dynamic Link"}:
         sanitized["options"] = source.get("options") or source.get("_doctype") or ""
     if fieldtype in {"Table", "Mixed Table"}:
-        sanitized["options"] = json.dumps(_sanitize_table_options(source.get("options")))
+        sanitized["options"] = json.dumps(_sanitize_table_options(source.get("options"), source))
 
     return sanitized
 
@@ -404,22 +410,30 @@ def _build_template_doc(
     target_doctype="",
     base_form_name=None,
     version_label=None,
-    version_group="",
-    source_template="",
+    version_group=None,
+    source_template=None,
 ):
     serialized_schema = json.dumps(_sanitize_schema(schema_json), indent=2, sort_keys=True)
     is_active = frappe.utils.cint(is_active)
     form_type = (form_type or "Form").strip() or "Form"
     target_doctype = (target_doctype or "").strip()
     template_name = (template_name or "").strip()
+    existing_name = _get_template_lookup_name(template_name=template_name)
+    doc = _get_template_doc(existing_name, permission="write") if existing_name else None
+    if base_form_name is None:
+        base_form_name = getattr(doc, "base_form_name", None)
+    if version_label is None:
+        version_label = getattr(doc, "version_label", None)
+    if version_group is None:
+        version_group = getattr(doc, "version_group", None)
+    if source_template is None:
+        source_template = getattr(doc, "source_template", None)
     base_form_name = (base_form_name or "").strip() or form_name
     version_label = normalize_form_version_label(version_label or DEFAULT_FORM_VERSION_LABEL)
     version_group = (version_group or "").strip()
     source_template = (source_template or "").strip()
 
-    existing_name = _get_template_lookup_name(template_name=template_name)
     if existing_name:
-        doc = _get_template_doc(existing_name, permission="write")
         doc.form_name = form_name
         doc.schema_json = serialized_schema
         doc.form_type = form_type
@@ -536,6 +550,11 @@ def get_template_version_context(template_name):
         doc = _get_template_doc(template_name, permission="write")
         backfill_template_version_metadata(doc)
         next_version_label = suggest_next_version_label(getattr(doc, "version_label", DEFAULT_FORM_VERSION_LABEL))
+        existing_labels = set(frappe.get_all(
+            TEMPLATE_DOCTYPE, filters={"version_group": doc.version_group}, pluck="version_label"
+        ))
+        while next_version_label in existing_labels:
+            next_version_label = suggest_next_version_label(next_version_label)
         base_form_name = getattr(doc, "base_form_name", "") or doc.form_name
         return {
             "template_name": doc.name,
@@ -686,8 +705,8 @@ def save_form_template(
     target_doctype="",
     base_form_name=None,
     version_label=None,
-    version_group="",
-    source_template="",
+    version_group=None,
+    source_template=None,
 ):
     """Create or update a Dynamic Form Template.
 
@@ -715,13 +734,12 @@ def save_form_template(
         previous_template_name = (template_name or "").strip()
         form_name = (form_name or "").strip()
         if not form_name:
-            version_label = normalize_form_version_label(version_label or DEFAULT_FORM_VERSION_LABEL)
             form_name = build_versioned_form_name(base_form_name, version_label)
 
-        source_template = (source_template or "").strip()
-        version_group = (version_group or "").strip()
-        base_form_name = (base_form_name or "").strip()
-        if source_template:
+        source_template = source_template.strip() if source_template is not None else None
+        version_group = version_group.strip() if version_group is not None else None
+        base_form_name = base_form_name.strip() if base_form_name is not None else None
+        if source_template and not previous_template_name:
             source_doc = _get_template_doc(source_template, permission="read")
             version_group = version_group or getattr(source_doc, "version_group", "") or ""
             base_form_name = base_form_name or getattr(source_doc, "base_form_name", "") or source_doc.form_name
@@ -734,8 +752,8 @@ def save_form_template(
             is_active=is_active,
             form_type=form_type,
             target_doctype=target_doctype,
-            base_form_name=base_form_name or form_name,
-            version_label=version_label or DEFAULT_FORM_VERSION_LABEL,
+            base_form_name=base_form_name,
+            version_label=version_label,
             version_group=version_group,
             source_template=source_template,
         )

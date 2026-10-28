@@ -62,7 +62,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 			summary: "A quick map of the builder, viewer, DocType creation and integration, and AI features before you start configuring anything.",
 			content: `
 				<p class="afb-docs-lead">
-					AmPower Form Builder stores form definitions as JSON, renders them dynamically, and keeps the data model intentionally small.
+					Ampower Form Builder stores form definitions as JSON, renders them dynamically, and keeps the data model intentionally small.
 					Use this guide if you want to install the app, import an existing DocType, create a real DocType from a saved form, embed a form into another DocType, or let AI draft and autofill forms for you.
 				</p>
 				<div class="afb-docs-grid two-up">
@@ -109,7 +109,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 				</p>
 				<div class="afb-docs-grid two-up">
 					${card("Form Builder Admin", list([
-						"Full access to all AmPower Form Builder doctypes.",
+						"Full access to all Ampower Form Builder doctypes.",
 						"Can create, read, write, delete, submit, cancel, amend, export, import, print, report, select, and share.",
 						"Use for setup, maintenance, and AI configuration.",
 					]))}
@@ -318,11 +318,11 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 						"Open a saved parent document to see the integration tab.",
 					]))}
 					${card("What appears on the target DocType", list([
-						"A reusable <strong>AmPower Form Integration</strong> tab.",
+						"A reusable <strong>Ampower Form Integration</strong> tab.",
 						"A <strong>Select Form</strong> link filtered to active integration templates for that DocType.",
 						"An embedded form view area.",
 						"A read-only <strong>Submission Reference</strong> link to the saved submission.",
-						"An <strong>Autofill Subform</strong> action that opens the AI autofill flow for the embedded viewer.",
+						"An <strong>Autofill Form</strong> action that opens the AI autofill flow for the embedded viewer.",
 					]))}
 				</div>
 				${callout("Important behavior", `
@@ -337,7 +337,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 					"Pick the active integration form from the selector.",
 					"Fill the subform and save the parent document.",
 					"The submission is stored in <strong>Dynamic Form Submission</strong> and linked back to the parent record.",
-					"Later, use <strong>Autofill Subform</strong> to prefill the same embedded form from a PDF or image.",
+					"Later, use <strong>Autofill Form</strong> to prefill the same embedded form from a PDF or image.",
 				]))}
 			`,
 		},
@@ -446,7 +446,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 				`, "warning")}
 				${callout("Embedded subforms", `
 					<p>
-						If the template is used as a Doctype Integration, the same AI autofill flow is also exposed on the parent document through <strong>Autofill Subform</strong>.
+						If the template is used as a Doctype Integration, the same AI autofill flow is also exposed on the parent document through <strong>Autofill Form</strong>.
 					</p>
 				`, "brand")}
 				${card("Prompt control", list([
@@ -1141,7 +1141,7 @@ frappe.pages["form-builder-docs"].on_page_load = function (wrapper) {
 			<div class="afb-docs-container">
 				<section class="afb-docs-hero">
 					<div class="afb-docs-hero-copy">
-						<div class="afb-docs-kicker">AmPower Form Builder</div>
+						<div class="afb-docs-kicker">Ampower Form Builder</div>
 						<h1>Setup, Import, Integrate & Automate Forms</h1>
 					</div>
 				</section>

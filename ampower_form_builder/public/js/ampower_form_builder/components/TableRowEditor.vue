@@ -79,7 +79,7 @@ function updateLabel(index) {
 
 function updateKey(index) {
 	localRows[index]._manualKey = true;
-	localRows[index].key = normalizeFieldname(localRows[index].key, `row_${index + 1}`);
+	localRows[index].key = String(localRows[index].key || "").trim();
 	emitRows();
 }
 

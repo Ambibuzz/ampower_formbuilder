@@ -1,6 +1,6 @@
-# AmPower Form Builder
+# Ampower Form Builder
 
-AmPower Form Builder is a schema-driven form builder for Frappe/ERPNext. It lets you design forms visually, store the form definition as JSON, render those forms dynamically, capture submissions, optionally integrate a form directly into an existing DocType, and create a real DocType from a saved builder form when you need one.
+Ampower Form Builder is a schema-driven form builder for Frappe/ERPNext. It lets you design forms visually, store the form definition as JSON, render those forms dynamically, capture submissions, optionally integrate a form directly into an existing DocType, and create a real DocType from a saved builder form when you need one.
 
 ## What It Includes
 
@@ -30,7 +30,7 @@ This means you can support many forms without polluting the system with one DocT
 
 ## Print Builder
 
-AmPower Form Builder also ships a dedicated print-format editor in the same app.
+Ampower Form Builder also ships a dedicated print-format editor in the same app.
 
 It is built for `Dynamic Print Format` records and is separate from the form builder and form viewer screens.
 
@@ -84,7 +84,7 @@ bench --site <your-site> migrate
 Make sure:
 
 - `ampower_form_builder` is installed on your site
-- you have access to the AmPower Form Builder page
+- you have access to the Ampower Form Builder page
 - frontend assets are built and loading correctly
 - `Form Builder Config` has your `OpenAI API Key`, `OpenAI API URL`, and `Google Service Account JSON` set up
 - optional prompts are configured if you want to customize the AI flows:
@@ -181,7 +181,7 @@ Open the Form Viewer route:
 Replace `<template-name>` with the `Dynamic Form Template` document name you want to render.
 
 In the viewer, you can also use `Autofill with AI` from the menu to upload a PDF or image and prefill the current form with detected values. Review the values before you submit.
-If the form is embedded inside a target DocType, the parent document also gets an `Autofill Subform` action that opens the same autofill flow for the subform.
+If the form is embedded inside a target DocType, add that DocType to **Form Builder Config ? Form Autofill ? Doctypes** to show the `Autofill Form` action on saved parent documents with a selected form. DocTypes outside this list do not show the button; an empty list hides it everywhere.
 
 ### 3. Create A DocType From The Builder
 
@@ -255,9 +255,9 @@ The integration area on the target DocType will show:
 
 Save the template after confirming the `Form Type` and `Target DocType`.
 
-On save, AmPower Form Builder syncs the target DocType with:
+On save, Ampower Form Builder syncs the target DocType with:
 
-- a reusable `AmPower Form Integration` tab
+- a reusable `Ampower Form Integration` tab
 - a `Select Form` link filtered to active integration templates for that DocType
 - an embedded form viewer area
 - a `Submission Reference` link to the saved submission
@@ -268,7 +268,7 @@ The integration tab is hidden on a brand-new unsaved parent record, so open and 
 
 Go to the target DocType in Desk and open a document.
 
-You should see the `AmPower Form Integration` tab with the form selector.
+You should see the `Ampower Form Integration` tab with the form selector.
 
 Select the saved form template if it is not selected already.
 
@@ -281,7 +281,7 @@ When the embedded form is submitted:
 - the data is saved in `Dynamic Form Submission`
 - the parent document gets a `Submission Reference`
 - the embedded viewer stays synchronized with the saved submission
-- the parent document can later reopen the same subform through `Autofill Subform`
+- the parent document can later reopen the same subform through `Autofill Form`
 
 ### 5. Edit An Existing Form
 
@@ -328,7 +328,7 @@ Current behavior:
 ### AI Autofill
 
 Use `Autofill with AI` from the viewer when you want to map a PDF or image to a saved template.
-If the template is used as a `Doctype Integration`, you can also launch the same autofill flow from the parent DocType with `Autofill Subform`.
+If the template is used as a `Doctype Integration`, you can also launch the same autofill flow from the parent DocType with `Autofill Form`.
 
 The flow uses:
 
@@ -453,3 +453,5 @@ If the integration tab does not show up on the target DocType:
 ## License
 
 MIT
+
+Form editing can be configured in **Form Builder Config ? Form Editing ? Allow Editing Forms After Submissions**. It is disabled by default: once a template has any saved submission, changing its schema, form type, or target DocType requires a new version. Enable it to allow those edits on the same template; existing submission data is not rewritten. Native DocType duplicates start a separate version group with version 1.0 and require a new form name.

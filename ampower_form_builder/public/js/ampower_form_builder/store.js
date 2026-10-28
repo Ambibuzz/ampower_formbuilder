@@ -5,6 +5,7 @@ import {
 	buildDefaultSection,
 	buildDefaultTableColumn,
 	buildDefaultTableRow,
+	buildTableOptions,
 	buildFlatFieldArray,
 	ensureUniqueFieldname,
 	FIELD_TYPE_MAP,
@@ -239,6 +240,7 @@ function sanitizeBuilderField(field = {}, usedFieldnames = new Set()) {
 			item.table_columns || [],
 			item.fieldtype === "Mixed Table" ? (item.table_rows || []) : []
 		);
+		item.options = buildTableOptions(item);
 	}
 
 	return item;
@@ -290,6 +292,7 @@ function buildImportedField(rawField = {}, childTables = {}) {
 		fetch_from: rawField.fetch_from || "",
 		precision: rawField.precision || "",
 		options: rawField.options || "",
+		vertical_table: Number(rawField.vertical_table) ? 1 : 0,
 		_doctype: nextType === "Link" ? (rawField.options || "") : "",
 	};
 
@@ -304,6 +307,7 @@ function buildImportedField(rawField = {}, childTables = {}) {
 			|| { columns: [] };
 		field.options = rawField.options || "";
 		field._doctype = rawField.options || "";
+		field.vertical_table = Number(rawField.vertical_table) ? 1 : 0;
 		field.table_columns = sanitizeTableColumns((tableMeta.columns || []).map((column, index) => ({
 			label: column.label || column.fieldname || `Column ${index + 1}`,
 			fieldname: column.fieldname || column.field_name || column.label || `column_${index + 1}`,
@@ -369,12 +373,19 @@ function normalizeHydratedField(field = {}) {
 	item.field_name = item.fieldname;
 	item._doctype = item.fieldtype === "Link" ? (item._doctype || item.options || "") : "";
 
-	if (["Table", "Mixed Table"].includes(item.fieldtype) && typeof item.options === "string") {
-		const tableConfig = parseTableOptions(item.options);
+	if (["Table", "Mixed Table"].includes(item.fieldtype)) {
+		const tableConfig = typeof item.options === "string" ? parseTableOptions(item.options) : (item.options || {});
 		item.image_column = item.image_column || tableConfig.image_column || "";
-		item.table_columns = sanitizeTableColumns(tableConfig.columns || item.table_columns || []);
-		item.table_rows = (tableConfig.rows || item.table_rows || []).map((row, index) =>
-			normalizeTableRow(row, index));
+		item.table_row_title = item.table_row_title || tableConfig.table_row_title || tableConfig.row_title || "";
+		item.vertical_table = Number(item.vertical_table) ? 1 : (Number(tableConfig.vertical_table) ? 1 : 0);
+		const sourceColumns = (item.table_columns && item.table_columns.length)
+			? item.table_columns
+			: (tableConfig.columns || item.columns || []);
+		const sourceRows = (item.table_rows && item.table_rows.length)
+			? item.table_rows
+			: (tableConfig.rows || item.rows || []);
+		item.table_columns = sanitizeTableColumns(sourceColumns || []);
+		item.table_rows = (sourceRows || []).map((row, index) => normalizeTableRow(row, index));
 	}
 
 	item.table_columns = sanitizeTableColumns(item.table_columns || []);
@@ -640,6 +651,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 							field.table_columns || [],
 							field.fieldtype === "Mixed Table" ? (field.table_rows || []) : []
 						);
+						field.options = buildTableOptions(field);
 					}
 					this.sections = sanitizeBuilderSections(this.sections);
 					this.markDirty();
@@ -1008,6 +1020,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 				field.table_columns,
 				field.fieldtype === "Mixed Table" ? (field.table_rows || []) : []
 			);
+			field.options = buildTableOptions(field);
 			this.markDirty();
 			return field.table_columns.at(-1);
 		},
@@ -1022,6 +1035,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 				field.table_columns,
 				field.fieldtype === "Mixed Table" ? (field.table_rows || []) : []
 			);
+			field.options = buildTableOptions(field);
 			this.markDirty();
 			return field.table_columns;
 		},
@@ -1035,6 +1049,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 				field.table_columns || [],
 				field.fieldtype === "Mixed Table" ? field.table_rows : []
 			);
+			field.options = buildTableOptions(field);
 			this.markDirty();
 			return field.table_rows;
 		},
@@ -1050,6 +1065,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 				field.fieldtype === "Mixed Table" ? (field.table_rows || []) : []
 			);
 			field.table_columns = nextColumns;
+			field.options = buildTableOptions(field);
 			this.markDirty();
 		},
 		updateTableColumn(fieldId, columnIndex, updates) {
@@ -1065,6 +1081,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 				field.table_columns,
 				field.fieldtype === "Mixed Table" ? (field.table_rows || []) : []
 			);
+			field.options = buildTableOptions(field);
 			this.markDirty();
 		},
 		validateTableField(field) {
@@ -1088,6 +1105,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 			} else {
 				field.table_data.push(buildEmptyTableRow(field.table_columns || []));
 			}
+			field.options = buildTableOptions(field);
 			this.markDirty();
 			return field.table_data.at(-1);
 		},
@@ -1107,6 +1125,7 @@ export const useFormBuilderStore = defineStore("ampowerFormBuilder", {
 			} else {
 				field.table_data.splice(rowIndex, 1);
 			}
+			field.options = buildTableOptions(field);
 			this.markDirty();
 		},
 		updateTableCell(fieldId, { rowIndex, fieldname, value }) {

@@ -1,0 +1,65 @@
+{
+ "app": "ampower_form_builder",
+ "creation": "2026-07-15 17:33:05.249206",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "milestone",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "home",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Home",
+   "link_to": "Form Builder",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "building",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Form Builder",
+   "link_to": "form_builder",
+   "link_type": "Page",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "view",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Form Viewer",
+   "link_to": "form_viewer",
+   "link_type": "Page",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "book-open",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Form Builder Documentation",
+   "link_to": "form-builder-docs",
+   "link_type": "Page",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-08-17 11:19:27.308147",
+ "modified_by": "satyam.gupta@ambibuzz.com",
+ "module": "Ampower Form Builder",
+ "name": "Form Builder",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "Form Builder"
+}

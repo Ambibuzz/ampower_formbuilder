@@ -877,10 +877,6 @@
 .fiq-preview-section {
 	margin-bottom: 1.5rem;
 	padding: 18px;
-	border: 1px solid rgba(148, 163, 184, 0.18);
-	border-radius: 18px;
-	background: rgba(255, 255, 255, 0.84);
-	box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
 }
 
 .fiq-preview-section:last-child {
@@ -900,12 +896,12 @@
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0 -0.75rem;
+	gap:10px
 }
 
 .fiq-preview-col {
 	flex: 1;
 	min-width: 260px;
-	padding: 0 0.75rem;
 }
 
 .fiq-preview-fields {
@@ -1736,7 +1732,6 @@
 
 	.fiq-preview-section {
 		margin-bottom: 1rem;
-		padding: 14px;
 		border-radius: 14px;
 	}
 
@@ -1967,7 +1962,7 @@
 .fv-layout-container.is-embedded {
 	display: block;
 	max-width: 100%;
-	min-height: auto;
+	min-height: fit-content !important;
 	margin: 0;
 }
 
