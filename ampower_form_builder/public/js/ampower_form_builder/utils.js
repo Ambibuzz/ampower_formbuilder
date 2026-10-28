@@ -49,6 +49,7 @@ const SCHEMA_FIELD_KEYS = new Set([
 	"reqd",
 	"read_only",
 	"hidden",
+	"vertical_table",
 	"depends_on",
 	"options",
 	"fetch_from",
@@ -56,6 +57,9 @@ const SCHEMA_FIELD_KEYS = new Set([
 	"precision",
 	"table_row_title",
 	"image_column",
+	"table_columns",
+	"table_rows",
+	"table_data",
 ]);
 
 export function getControlComponentName(fieldtype = "Data") {
@@ -217,6 +221,7 @@ export function buildDefaultField(fieldtype = "Data") {
 		reqd: 0,
 		read_only: 0,
 		hidden: 0,
+		vertical_table: 0,
 		depends_on: "",
 		options: ["Select", "Radio"].includes(fieldtype) ? "Option 1\nOption 2" : "",
 		fetch_from: "",
@@ -253,16 +258,18 @@ export function buildDefaultTableRow(index = 0) {
 		id: uid(),
 		label: `Row ${index + 1}`,
 		key: `row_${index + 1}`,
+		_manualKey: false,
 	};
 }
 
 export function normalizeTableColumn(column = {}, index = 0) {
 	const nextFieldtype = column.fieldtype;
+	const fieldname = String(column.fieldname || "").trim() || normalizeFieldname(column.label || `column_${index + 1}`, `column_${index + 1}`);
 	return {
 		...buildDefaultTableColumn(index),
 		...clone(column),
 		label: column.label || `Column ${index + 1}`,
-		fieldname: normalizeFieldname(column.fieldname || column.label || `column_${index + 1}`, `column_${index + 1}`),
+		fieldname,
 		fieldtype: TABLE_COLUMN_FIELD_TYPES.includes(nextFieldtype) ? nextFieldtype : "Data",
 		reqd: column.reqd ? 1 : 0,
 		options: column.options || "",
@@ -275,11 +282,12 @@ export function normalizeTableColumn(column = {}, index = 0) {
 }
 
 export function normalizeTableRow(row = {}, index = 0) {
+	const key = String(row.key || "").trim() || normalizeFieldname(row.label || `row_${index + 1}`, `row_${index + 1}`);
 	return {
 		...buildDefaultTableRow(index),
 		...clone(row),
 		label: String(row.label || `${index + 1}`),
-		key: normalizeFieldname(row.key || row.label || `row_${index + 1}`, `row_${index + 1}`),
+		key,
 	};
 }
 
@@ -296,6 +304,7 @@ export function parseTableOptions(value) {
 export function buildTableOptions(field = {}) {
 	return JSON.stringify({
 		mode: field.fieldtype === "Mixed Table" ? "mixed" : "table",
+		vertical_table: Number(field.vertical_table) ? 1 : 0,
 		table_row_title: field.table_row_title || "",
 		image_column: field.image_column || "",
 		columns: clone(field.table_columns || []).map((column, index) => {
@@ -310,11 +319,13 @@ export function buildTableOptions(field = {}) {
 				formula: normalized.formula || "",
 				precision: normalized.precision ?? "",
 				options: normalized.fieldtype === "Link" ? (normalized._doctype || normalized.options || "") : (normalized.options || ""),
+				_manualFieldname: Boolean(normalized._manualFieldname),
 			};
 		}),
 		rows: clone(field.table_rows || []).map((row) => ({
 			label: row.label,
-			key: normalizeFieldname(row.key || row.label || "row", row.label || "row"),
+			key: String(row.key || "").trim() || normalizeFieldname(row.label || "row", row.label || "row"),
+			_manualKey: Boolean(row._manualKey),
 		})),
 	});
 }

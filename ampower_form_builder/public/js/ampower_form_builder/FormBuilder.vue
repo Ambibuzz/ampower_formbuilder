@@ -555,7 +555,7 @@ function duplicateExistingForm() {
 							}]
 							: []),
 					],
-					(duplicateValues) => {
+					async (duplicateValues) => {
 						const formName = String(duplicateValues.form_name || "").trim();
 						const versionLabel = String(
 							duplicateValues.version_label
@@ -589,6 +589,12 @@ function duplicateExistingForm() {
 									dirtyReason: "template_duplicated",
 								}
 						);
+
+						try {
+							await saveTemplate();
+						} catch (error) {
+							return;
+						}
 
 						frappe.show_alert({
 							message: isAmended

@@ -459,16 +459,37 @@ export function normalizeTableValue(field = {}, rows = []) {
 	});
 
 	if (field.fieldtype !== "Mixed Table" || !config.rows.length) {
-		return normalizedRows;
+		return field.fieldtype === "Mixed Table"
+			? normalizedRows.map((row, index) => normalizeMixedTableRowMeta(row, {}, index))
+			: normalizedRows;
 	}
 
-	return config.rows.map((rowDefinition, index) => ({
-		...config.columns.reduce((acc, column) => {
-			acc[column.fieldname] = column.fieldtype === "Check" ? 0 : "";
-			return acc;
-		}, {}),
-		...(normalizedRows[index] || {}),
-	}));
+	return config.rows.map((rowDefinition, index) => {
+		const {
+			row_name,
+			row_label,
+			row_key,
+			label,
+			key,
+			...rowValues
+		} = normalizedRows[index] || {};
+
+		return {
+			...config.columns.reduce((acc, column) => {
+				acc[column.fieldname] = column.fieldtype === "Check" ? 0 : "";
+				return acc;
+			}, {}),
+			...rowValues,
+			...normalizeMixedTableRowMeta({
+				label,
+				key,
+				row_name,
+				row_label,
+				row_key,
+				...rowValues,
+			}, rowDefinition, index),
+		};
+	});
 }
 
 export function getEmptyTableCellValue(column = {}) {
@@ -486,6 +507,39 @@ export function normalizeTableCellValue(column = {}, value) {
 		return Number.isFinite(next) ? next : getEmptyTableCellValue(column);
 	}
 	return value;
+}
+
+function normalizeMixedTableRowMeta(row = {}, rowDefinition = {}, index = 0) {
+	const rowName = String(
+		row.row_name
+		?? rowDefinition.row_name
+		?? row.label
+		?? rowDefinition.label
+		?? ""
+	).trim() || `Row ${index + 1}`;
+	const rowLabel = String(
+		row.row_label
+		?? rowDefinition.row_label
+		?? row.key
+		?? rowDefinition.key
+		?? ""
+	).trim() || normalizeFieldname(rowName, `row_${index + 1}`);
+	const rowKey = String(
+		row.row_key
+		?? rowDefinition.row_key
+		?? row.key
+		?? rowDefinition.key
+		?? ""
+	).trim() || normalizeFieldname(rowLabel || rowName, `row_${index + 1}`);
+
+	return {
+		...row,
+		label: row.label ?? rowName,
+		key: row.key ?? rowKey,
+		row_name: rowName,
+		row_label: rowLabel,
+		row_key: rowKey,
+	};
 }
 
 export async function syncTableFetchColumns(columns = [], row = {}, reportError = null) {

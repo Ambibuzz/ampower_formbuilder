@@ -29,7 +29,7 @@
 						style="display: inline-flex; align-items: center; justify-content: center; min-height: 26px; padding: 2px 8px;"
 						@click="$emit('duplicate-row')"
 					>
-						<svg class="es-icon es-line icon-xs" aria-hidden="true">
+						<svg class=" icon icon-sm" aria-hidden="true">
 							<use href="#icon-duplicate"></use>
 						</svg>
 					</button>
@@ -43,7 +43,7 @@
 						@click="$emit('delete-row')"
 					>
 						<svg class="icon icon-sm" aria-hidden="true">
-							<use href="#icon-delete"></use>
+							<use href="#icon-delete-active"></use>
 						</svg>
 					</button>
 					<button
@@ -55,7 +55,7 @@
 						style="display: inline-flex; align-items: center; justify-content: center; min-height: 26px; padding: 2px 8px;"
 						@click="$emit('add-row')"
 					>
-						<svg class="es-icon es-line icon-xs" aria-hidden="true">
+						<svg class="icon icon-sm" aria-hidden="true">
 							<use href="#icon-add"></use>
 						</svg>
 					</button>
@@ -68,7 +68,7 @@
 						:disabled="!canGoPrevious"
 						@click="$emit('previous')"
 					>
-						<svg class="es-icon es-line icon-xs" aria-hidden="true">
+						<svg class="icon icon-sm" aria-hidden="true">
 							<use href="#icon-left"></use>
 						</svg>
 					</button>
@@ -81,14 +81,14 @@
 						:disabled="!canGoNext"
 						@click="$emit('next')"
 					>
-						<svg class="es-icon es-line icon-xs" aria-hidden="true">
+						<svg class="icon icon-sm" aria-hidden="true">
 							<use href="#icon-right"></use>
 						</svg>
 					</button>
 				</div>
 				<button type="button" class="btn btn-default btn-sm d-inline-flex align-items-center justify-content-center" :title="__('Close')" style="min-height: 26px; padding: 2px 8px;" @click="$emit('close')">
-					<svg class="es-icon es-line icon-xs" aria-hidden="true">
-						<use href="#icon-close"></use>
+					<svg class="icon  icon-sm" aria-hidden="true">
+						<use href="#icon-remove"></use>
 					</svg>
 				</button>
 			</div>

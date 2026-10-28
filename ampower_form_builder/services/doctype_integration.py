@@ -31,6 +31,13 @@ INTEGRATION_LINK_FILTERS = json.dumps(
 )
 
 
+@frappe.whitelist()
+def is_doctype_autofill_enabled(doctype):
+    """Return only the autofill visibility setting, without exposing config secrets."""
+    config = frappe.get_single("Form Builder Config")
+    return any(row.document_type == doctype for row in config.get("doctypes", []))
+
+
 class DoctypeIntegrationManager:
     """Synchronize the shared integration UI for a target DocType.
 
@@ -286,6 +293,29 @@ function afbCanAutofillSubform(frm) {{
 	return afbCanShowIntegrationFields(frm) && Boolean(frm.doc["{form_field}"]);
 }}
 
+async function afbRefreshAutofillButton(frm) {{
+	const requestId = (frm._afbAutofillButtonRequestId || 0) + 1;
+	frm._afbAutofillButtonRequestId = requestId;
+	frm.remove_custom_button(__("Autofill Form"));
+	if (!afbCanAutofillSubform(frm)) return;
+
+	try {{
+		const response = await frappe.call({{
+			method: "ampower_form_builder.services.doctype_integration.is_doctype_autofill_enabled",
+			args: {{ doctype: frm.doctype }},
+		}});
+		if (
+			frm._afbAutofillButtonRequestId === requestId
+			&& response.message
+			&& afbCanAutofillSubform(frm)
+		) {{
+			frm.add_custom_button(__("Autofill Form"), () => afbOpenAutofillSubform(frm));
+		}}
+	}} catch (error) {{
+		console.error("Unable to check form autofill configuration", error);
+	}}
+}}
+
 function afbEnsureIntegrationMountPoint(viewField) {{
 	let mountPoint = viewField.$wrapper.find(".{root_class}").get(0);
 	if (!mountPoint) {{
@@ -397,9 +427,7 @@ frappe.ui.form.on({json.dumps(target_doctype)}, {{
 	}},
 	refresh(frm) {{
 		afbRenderIntegrationViewer(frm);
-		if (afbCanAutofillSubform(frm)) {{
-			frm.add_custom_button(__("Autofill Subform"), () => afbOpenAutofillSubform(frm));
-		}}
+		return afbRefreshAutofillButton(frm);
 	}},
 	async "{form_field}"(frm) {{
 		if (frm.doc["{submission_field}"]) {{
@@ -408,6 +436,7 @@ frappe.ui.form.on({json.dumps(target_doctype)}, {{
 		}}
 		afbDestroyIntegrationViewer(frm);
 		afbRenderIntegrationViewer(frm);
+		await afbRefreshAutofillButton(frm);
 	}},
 }});
 """
