@@ -115,6 +115,7 @@
 			<label><input :checked="Boolean(form.reqd)" type="checkbox" @change="toggleFlag('reqd', $event.target.checked)"> Required</label>
 			<label><input :checked="Boolean(form.read_only)" type="checkbox" @change="toggleFlag('read_only', $event.target.checked)"> Read Only</label>
 			<label><input :checked="Boolean(form.hidden)" type="checkbox" @change="toggleFlag('hidden', $event.target.checked)"> Hidden</label>
+			<label v-if="form.fieldtype === 'Table'"><input :checked="Boolean(form.vertical_table)" type="checkbox" @change="toggleFlag('vertical_table', $event.target.checked)"> Vertical Table</label>
 		</div>
 	</div>
 </template>

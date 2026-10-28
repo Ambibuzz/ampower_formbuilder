@@ -129,11 +129,18 @@ def backfill_template_version_metadata(template_doc) -> None:
 
 
 def validate_template_mutability(template_doc) -> None:
-	"""Block schema mutations once a form version already has submissions."""
+	"""Block changes after submissions unless configuration allows editing."""
 	if template_doc.is_new():
 		return
 
 	if not any(template_doc.has_value_changed(fieldname) for fieldname in LOCKED_TEMPLATE_FIELDS):
+		return
+
+	if frappe.utils.cint(
+		frappe.db.get_single_value(
+			"Form Builder Config", "allow_editing_forms_after_submissions", cache=False
+		)
+	):
 		return
 
 	if not frappe.db.exists(SUBMISSION_DOCTYPE, {"form_template": template_doc.name}):
@@ -141,7 +148,8 @@ def validate_template_mutability(template_doc) -> None:
 
 	frappe.throw(
 		_(
-			"This form version already has saved submissions. Create a new version in the builder instead of editing the existing schema."
+			"This form version already has saved submissions. Create a new version in the builder, "
+			"or ask a System Manager to enable 'Allow Editing Forms After Submissions' in Form Builder Config."
 		),
 		title=_("Form Version Locked"),
 	)

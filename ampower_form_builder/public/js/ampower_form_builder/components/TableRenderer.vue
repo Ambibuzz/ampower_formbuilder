@@ -70,8 +70,8 @@
 										aria-label="View Row"
 										@click="openExpandedRow(rowEntry.rowIndex)"
 									>
-										<svg class="es-icon es-line icon-sm" aria-hidden="true">
-											<use href="#icon-view"></use>
+										<svg class="icon-sm icon" aria-hidden="true">
+											<use href="#icon-expand"></use>
 										</svg>
 									</button>
 								</div>
@@ -108,8 +108,8 @@
 										aria-label="View Row"
 										@click="openExpandedRow(rowEntry.rowIndex)"
 									>
-										<svg class="es-icon es-line icon-sm" aria-hidden="true">
-											<use href="#icon-view"></use>
+										<svg class="icon icon-sm" aria-hidden="true">
+											<use href="#icon-expand"></use>
 										</svg>
 									</button>
 								</div>

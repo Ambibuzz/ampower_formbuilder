@@ -178,7 +178,7 @@ function updateLabel(index) {
 
 function updateFieldname(index) {
 	localColumns[index]._manualFieldname = true;
-	localColumns[index].fieldname = normalizeFieldname(localColumns[index].fieldname, `column_${index + 1}`);
+	localColumns[index].fieldname = String(localColumns[index].fieldname || "").trim();
 	emitColumns();
 }
 
